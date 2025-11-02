@@ -44,21 +44,24 @@ function getCartItemCount() {
     return cart.reduce((count, item) => count + item.quantity, 0);
 }
 function updateCartUI() {
-    const cartBtn = document.querySelector('.icon-btn[aria-label="סל קניות"]');
-    if (!cartBtn)
-        return;
+    // Update all cart buttons on the page
+    const cartBtns = document.querySelectorAll('.icon-btn[aria-label="סל קניות"]');
     const itemCount = getCartItemCount();
-    const existingBadge = cartBtn.querySelector('.cart-badge');
-    if (existingBadge) {
-        existingBadge.remove();
-    }
-    if (itemCount > 0) {
-        const badge = document.createElement('span');
-        badge.className = 'cart-badge';
-        badge.textContent = itemCount.toString();
-        cartBtn.style.position = 'relative';
-        cartBtn.appendChild(badge);
-    }
+    
+    cartBtns.forEach(cartBtn => {
+        const existingBadge = cartBtn.querySelector('.cart-badge');
+        if (existingBadge) {
+            existingBadge.remove();
+        }
+        if (itemCount > 0) {
+            const badge = document.createElement('span');
+            badge.className = 'cart-badge';
+            badge.textContent = itemCount.toString();
+            cartBtn.style.position = 'relative';
+            cartBtn.appendChild(badge);
+        }
+    });
+    
     localStorage.setItem('lalineCart', JSON.stringify(cart));
 }
 function showCartNotification(productName) {
