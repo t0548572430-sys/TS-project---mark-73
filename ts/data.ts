@@ -1,0 +1,92 @@
+// Interfaces
+export interface Product {
+    id: number;
+    name: string;
+    price: number;
+    oldPrice?: number | null;
+    image: string;
+    badge?: string;
+    category: string;
+}
+
+export interface CartItem extends Product {
+    quantity: number;
+}
+
+export interface CustomerInfo {
+    email: string | null;
+    firstName: string | null;
+    lastName: string | null;
+    address: string | null;
+    city: string | null;
+    zipCode: string | null;
+    phone: string | null;
+}
+
+export interface OrderData {
+    customer: CustomerInfo;
+    items: CartItem[];
+    total: number;
+    date: string;
+}
+
+export interface CurrentUser {
+    email: string;
+    firstName: string;
+    lastName: string;
+    isAdmin: boolean;
+}
+
+// Category names mapping
+export const categoryNames: { [key: string]: string } = {
+    "body-care": "טיפוח גוף",
+    "face-care": "טיפוח פנים",
+    "fragrances": "ניחוחות",
+    "home": "בית",
+    "accessories": "אביזרים"
+};
+
+// Products database
+export const products: Product[] = [
+    { id: 1, name: "חלוק רחצה מגבת דגם רוז", price: 299.90, oldPrice: null, image: "images/image (26).png", badge: "קנה 400₪ שלם 200₪", category: "body-care" },
+    { id: 2, name: "נעלי בית קוקוני 39-40", price: 109.90, oldPrice: null, image: "images/image (27).png", badge: "קנה 400₪ שלם 200₪", category: "accessories" },
+    { id: 3, name: "שמיכת פליז הדף", price: 179.90, oldPrice: null, image: "images/image (30).png", badge: "NEW", category: "home" },
+    { id: 4, name: "חמאת שיאה גוף בשר 250 גרם", price: 139.90, oldPrice: 165.90, image: "images/image (29).png", badge: "קנה 400₪ שלם 200₪", category: "body-care" },
+    { id: 5, name: "קרם גוף חמאת שיאה וקוקוי", price: 89.90, oldPrice: null, image: "images/image (26).png", badge: "NEW", category: "body-care" },
+    { id: 6, name: "שמן גוף ארומטי לבנדר", price: 119.90, oldPrice: 145.90, image: "images/image (27).png", badge: "מבצע", category: "body-care" },
+    { id: 7, name: "סבון נוזלי ים המלח", price: 49.90, oldPrice: null, image: "images/image (29).png", category: "body-care" },
+    { id: 8, name: "סקראב גוף קפה וקוקוס", price: 79.90, oldPrice: null, image: "images/image (30).png", badge: "פופולאר", category: "body-care" },
+    { id: 9, name: "קרם ידיים שקדים ודבש", price: 39.90, oldPrice: null, image: "images/image (26).png", category: "body-care" },
+    { id: 10, name: "קרם רגליים מנטה ואקליפטוס", price: 59.90, oldPrice: 69.90, image: "images/image (27).png", category: "body-care" },
+    { id: 11, name: "קרם פנים לחות אינטנסיבית", price: 149.90, oldPrice: null, image: "images/image (29).png", badge: "NEW", category: "face-care" },
+    { id: 12, name: "סרום פנים ויטמין C", price: 189.90, oldPrice: 219.90, image: "images/image (30).png", badge: "מומלץ", category: "face-care" },
+    { id: 13, name: "מסכת פנים בוץ ים המלח", price: 69.90, oldPrice: null, image: "images/image (26).png", category: "face-care" },
+    { id: 14, name: "ג'ל ניקוי פנים אלוורה", price: 59.90, oldPrice: null, image: "images/image (27).png", category: "face-care" },
+    { id: 15, name: "קרם עיניים אנטי אייג'ינג", price: 129.90, oldPrice: null, image: "images/image (29).png", badge: "פופולרי", category: "face-care" },
+    { id: 16, name: "בושם לאישה ורד ויסמין", price: 249.90, oldPrice: null, image: "images/image (30).png", badge: "NEW", category: "fragrances" },
+    { id: 17, name: "בושם לגבר עץ אלון ווניל", price: 269.90, oldPrice: 299.90, image: "images/image (26).png", category: "fragrances" },
+    { id: 18, name: "מי קולון לבנדר", price: 89.90, oldPrice: null, image: "images/image (27).png", category: "fragrances" },
+    { id: 19, name: "ספריי גוף קוקוס טרופי", price: 69.90, oldPrice: null, image: "images/image (29).png", badge: "מבצע", category: "fragrances" },
+    { id: 20, name: "נר ריחני וניל ופצ'ולי", price: 79.90, oldPrice: null, image: "images/image (30).png", category: "home" },
+    { id: 21, name: "מפיץ ריח במבוק ולימון", price: 99.90, oldPrice: 119.90, image: "images/image (26).png", badge: "פופולאר", category: "home" },
+    { id: 22, name: "מלחי אמבט ים המלח", price: 49.90, oldPrice: null, image: "images/image (27).png", category: "home" },
+    { id: 23, name: "פצצות אמבט לבנדר", price: 39.90, oldPrice: null, image: "images/image (29).png", badge: "NEW", category: "home" },
+    { id: 24, name: "מארז מתנה רומנטי", price: 199.90, oldPrice: 249.90, image: "images/image (30).png", badge: "מתנה מושלמת", category: "accessories" },
+    { id: 25, name: "מארז מתנה רומנטי", price: 199.90, oldPrice: 249.90, image: "images/image (30).png", badge: "מתנה מושלמת", category: "accessories" },
+    { id: 26, name: "מארז מתנה רומנטי", price: 199.90, oldPrice: 249.90, image: "images/image (30).png", badge: "מתנה מושלמת", category: "accessories" },
+    { id: 26, name: "מארז ספא לבנדר חלומי", price: 229.90, oldPrice: 269.90, image: "images/image (31).png", badge: "מומלץ", category: "body-care" },
+    { id: 27, name: "נר ריחני לב פצ'ולי", price: 69.90, oldPrice: null, image: "images/image (32).png", badge: "פופולאר", category: "home" },
+    { id: 28, name: "בושם לאישה ורדים וענבר", price: 259.90, oldPrice: 299.90, image: "images/image (33).png", badge: "NEW", category: "fragrances" },
+    { id: 29, name: "סרום לילה עשיר חומצה היאלורונית", price: 199.90, oldPrice: null, image: "images/image (34).png", badge: "מוצר מוביל", category: "face-care" },
+    { id: 30, name: "מגבת פנים רכה כותנה 100%", price: 49.90, oldPrice: 59.90, image: "images/image (35).png", badge: "מבצע", category: "accessories" },
+    { id: 31, name: "קרם גוף ורדים ופטל", price: 99.90, oldPrice: 119.90, image: "images/image (36).png", badge: "מבצע", category: "body-care" },
+    { id: 32, name: "שמן גוף וניל מרוקאי", price: 129.90, oldPrice: null, image: "images/image (37).png", badge: "מומלץ", category: "body-care" },
+    { id: 33, name: "סבון ידיים תפוז וקינמון", price: 39.90, oldPrice: null, image: "images/image (38).png", category: "body-care" },
+    { id: 34, name: "קרם פנים לילה קמומיל", price: 159.90, oldPrice: 189.90, image: "images/image (39).png", badge: "פופולרי", category: "face-care" },
+    { id: 35, name: "מסכת לחות עשירה דבש וטימין", price: 119.90, oldPrice: null, image: "images/image (40).png", category: "face-care" },
+    { id: 36, name: "בושם יוניסקס הדרים מרענן", price: 239.90, oldPrice: null, image: "images/image (41).png", badge: "NEW", category: "fragrances" },
+    { id: 37, name: "מפיץ ריח וניל וקוקוס", price: 89.90, oldPrice: null, image: "images/image (42).png", badge: "מוצר מוביל", category: "home" },
+    { id: 38, name: "נר זכוכית בעיצוב יוקרתי", price: 119.90, oldPrice: 149.90, image: "images/image (43).png", badge: "חדש", category: "home" },
+    { id: 39, name: "כפכפי ספא מפנקים", price: 79.90, oldPrice: 99.90, image: "images/image (44).png", badge: "מבצע", category: "accessories" },
+    { id: 40, name: "מארז מתנה יוקרה זהב", price: 289.90, oldPrice: 349.90, image: "images/image (45).png", badge: "מתנה מושלמת", category: "accessories" },
+];

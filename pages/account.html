@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>חשבון - Laline</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <!-- Top Banner -->
+    <div class="top-banner">
+        משלוח עד הבית ב- 5 ימי עסקים
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="header-icons">
+                <a href="cart.html" class="icon-btn" aria-label="סל קניות">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 2L7 6H3L6 20H18L21 6H17L15 2H9Z"/>
+                    </svg>
+                </a>
+                <a href="account.html" class="icon-btn" aria-label="חשבון">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="8" r="4"/>
+                        <path d="M6 21V19C6 16.7909 7.79086 15 10 15H14C16.2091 15 18 16.7909 18 19V21"/>
+                    </svg>
+                </a>
+            </div>
+
+            <nav class="main-nav">
+                <a href="../index.html" class="nav-link">טיפוח הגוף</a>
+                <a href="../index.html" class="nav-link">טיפוח הפנים</a>
+                <a href="../index.html" class="nav-link">בושמים</a>
+                <a href="../index.html" class="nav-link">מוצרי איוורדה והאמבט</a>
+                <a href="../index.html" class="nav-link">המבצרים שלנו</a>
+                <a href="../index.html" class="nav-link highlight">SHEA & KUKUI - NEW</a>
+            </nav>
+
+            <a href="../index.html" class="logo">
+                <span class="logo-text">Laline</span>
+                <span class="logo-subtitle">קולקציית חורף</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- Account Page -->
+    <section class="section account-page">
+        <div class="container">
+            <!-- Login/Register Forms -->
+            <div id="authForms" class="auth-forms">
+                <div class="auth-container">
+                    <div class="auth-tabs">
+                        <button class="auth-tab active" data-tab="login">התחברות</button>
+                        <button class="auth-tab" data-tab="register">הרשמה</button>
+                    </div>
+
+                    <!-- Login Form -->
+                    <form id="loginForm" class="auth-form active">
+                        <h2>התחבר לחשבון</h2>
+                        <div class="form-group">
+                            <label for="loginEmail">אימייל</label>
+                            <input type="email" id="loginEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword">סיסמה</label>
+                            <input type="password" id="loginPassword" required>
+                        </div>
+                        <button type="submit" class="auth-submit-btn">התחבר</button>
+                        <p class="auth-note">אימייל: admin@laline.com | סיסמה: admin123 (למנהל)</p>
+                        <p class="auth-note">אימייל: user@test.com | סיסמה: user123 (למשתמש)</p>
+                    </form>
+
+                    <!-- Register Form -->
+                    <form id="registerForm" class="auth-form">
+                        <h2>הרשמה לאתר</h2>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="regFirstName">שם פרטי</label>
+                                <input type="text" id="regFirstName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="regLastName">שם משפחה</label>
+                                <input type="text" id="regLastName" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="regEmail">אימייל</label>
+                            <input type="email" id="regEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="regPassword">סיסמה</label>
+                            <input type="password" id="regPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="regConfirmPassword">אימות סיסמה</label>
+                            <input type="password" id="regConfirmPassword" required>
+                        </div>
+                        <button type="submit" class="auth-submit-btn">הרשם</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- User Dashboard (Hidden by default) -->
+            <div id="userDashboard" class="user-dashboard" style="display: none;">
+                <h1 class="page-title">שלום, <span id="userName"></span>!</h1>
+                
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <h3>ההזמנות שלי</h3>
+                        <p>צפה בהיסטוריית ההזמנות שלך</p>
+                        <button class="dashboard-btn">צפה בהזמנות</button>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <h3>פרטים אישיים</h3>
+                        <p>עדכן את פרטי החשבון שלך</p>
+                        <button class="dashboard-btn">ערוך פרטים</button>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <h3>כתובות למשלוח</h3>
+                        <p>נהל את כתובות המשלוח שלך</p>
+                        <button class="dashboard-btn">נהל כתובות</button>
+                    </div>
+                    
+                    <div class="dashboard-card" id="adminCard" style="display: none;">
+                        <h3>ניהול מנהל</h3>
+                        <p>גישה לפאנל ניהול</p>
+                        <a href="admin.html" class="dashboard-btn">פאנל מנהל</a>
+                    </div>
+                </div>
+                
+                <button id="logoutBtn" class="logout-btn">התנתק</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h3 class="footer-title">אודות Laline</h3>
+                    <p class="footer-text">מותג ישראלי מוביל למוצרי טיפוח ויופי איכותיים. אנחנו מאמינים ביופי טבעי ובטיפוח המפנק את הגוף והנפש.</p>
+                </div>
+                <div class="footer-column">
+                    <h3 class="footer-title">קישורים מהירים</h3>
+                    <ul class="footer-links">
+                        <li><a href="about.html">אודותינו</a></li>
+                        <li><a href="#">צור קשר</a></li>
+                        <li><a href="terms.html">תקנון האתר</a></li>
+                        <li><a href="privacy.html">מדיניות פרטיות</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3 class="footer-title">שירות לקוחות</h3>
+                    <ul class="footer-links">
+                        <li><a href="shipping.html">משלוחים והחזרות</a></li>
+                        <li><a href="faq.html">שאלות נפוצות</a></li>
+                        <li><a href="account.html">החשבון שלי</a></li>
+                        <li><a href="cart.html">סל הקניות</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3 class="footer-title">עקבו אחרינו</h3>
+                    <div class="social-links">
+                        <a href="#" class="social-link" aria-label="Facebook">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="social-link" aria-label="Instagram">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                                <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/>
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="social-link" aria-label="WhatsApp">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Laline. כל הזכויות שמורות.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module" src="../js/account.js"></script>
+</body>
+</html>
