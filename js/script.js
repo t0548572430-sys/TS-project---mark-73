@@ -6,6 +6,12 @@ let currentCategory = 'all';
 let currentSearchQuery = '';
 let currentSort = 'default';
 let filteredProducts = [];
+// Infinite Scroll State
+const PRODUCTS_PER_PAGE = 20;
+let currentPage = 0;
+let displayedProducts = [];
+let isLoading = false;
+let hasMoreProducts = true;
 // Cart Management
 function addToCart(productId) {
     const product = products.find(p => p.id === productId);
@@ -44,24 +50,21 @@ function getCartItemCount() {
     return cart.reduce((count, item) => count + item.quantity, 0);
 }
 function updateCartUI() {
-    // Update all cart buttons on the page
-    const cartBtns = document.querySelectorAll('.icon-btn[aria-label="סל קניות"]');
+    const cartBtn = document.querySelector('.icon-btn[aria-label="סל קניות"]');
+    if (!cartBtn)
+        return;
     const itemCount = getCartItemCount();
-    
-    cartBtns.forEach(cartBtn => {
-        const existingBadge = cartBtn.querySelector('.cart-badge');
-        if (existingBadge) {
-            existingBadge.remove();
-        }
-        if (itemCount > 0) {
-            const badge = document.createElement('span');
-            badge.className = 'cart-badge';
-            badge.textContent = itemCount.toString();
-            cartBtn.style.position = 'relative';
-            cartBtn.appendChild(badge);
-        }
-    });
-    
+    const existingBadge = cartBtn.querySelector('.cart-badge');
+    if (existingBadge) {
+        existingBadge.remove();
+    }
+    if (itemCount > 0) {
+        const badge = document.createElement('span');
+        badge.className = 'cart-badge';
+        badge.textContent = itemCount.toString();
+        cartBtn.style.position = 'relative';
+        cartBtn.appendChild(badge);
+    }
     localStorage.setItem('lalineCart', JSON.stringify(cart));
 }
 function showCartNotification(productName) {
@@ -118,7 +121,7 @@ function filterProducts() {
             break;
     }
     filteredProducts = results;
-    renderProducts();
+    resetInfiniteScroll();
     updateResultsInfo();
 }
 // Update results info
@@ -136,7 +139,107 @@ function updateResultsInfo() {
     else {
         noResults.style.display = 'none';
         productGrid.style.display = 'grid';
-        resultsCount.textContent = `מציג ${filteredProducts.length} מוצרים`;
+        const showing = Math.min(displayedProducts.length, filteredProducts.length);
+        resultsCount.textContent = `מציג ${showing} מתוך ${filteredProducts.length} מוצרים`;
+    }
+}
+// Load more products
+function loadMoreProducts() {
+    if (isLoading || !hasMoreProducts) {
+        return;
+    }
+    const startIndex = currentPage * PRODUCTS_PER_PAGE;
+    const endIndex = startIndex + PRODUCTS_PER_PAGE;
+    const newProducts = filteredProducts.slice(startIndex, endIndex);
+    if (newProducts.length === 0) {
+        hasMoreProducts = false;
+        updateLoadMoreButton();
+        return;
+    }
+    isLoading = true;
+    showLoadMoreSpinner();
+    // Simulate network delay for smooth UX
+    setTimeout(() => {
+        displayedProducts = [...displayedProducts, ...newProducts];
+        currentPage++;
+        hasMoreProducts = endIndex < filteredProducts.length;
+        renderProducts();
+        updateLoadMoreButton();
+        updateProductCounter();
+        hideLoadMoreSpinner();
+        isLoading = false;
+    }, 400);
+}
+// Show loading spinner in button
+function showLoadMoreSpinner() {
+    const btn = document.getElementById('loadMoreBtn');
+    const textSpan = btn === null || btn === void 0 ? void 0 : btn.querySelector('.load-more-text');
+    const spinnerSpan = btn === null || btn === void 0 ? void 0 : btn.querySelector('.load-more-spinner');
+    if (btn && textSpan && spinnerSpan) {
+        btn.disabled = true;
+        textSpan.textContent = 'טוען...';
+        spinnerSpan.style.display = 'inline-flex';
+    }
+}
+// Hide loading spinner in button
+function hideLoadMoreSpinner() {
+    const btn = document.getElementById('loadMoreBtn');
+    const textSpan = btn === null || btn === void 0 ? void 0 : btn.querySelector('.load-more-text');
+    const spinnerSpan = btn === null || btn === void 0 ? void 0 : btn.querySelector('.load-more-spinner');
+    if (btn && textSpan && spinnerSpan) {
+        btn.disabled = false;
+        textSpan.textContent = 'טען עוד מוצרים';
+        spinnerSpan.style.display = 'none';
+    }
+}
+// Update Load More button visibility and state
+function updateLoadMoreButton() {
+    const container = document.getElementById('loadMoreContainer');
+    const btn = document.getElementById('loadMoreBtn');
+    if (!container)
+        return;
+    if (hasMoreProducts && filteredProducts.length > PRODUCTS_PER_PAGE) {
+        container.style.display = 'block';
+        if (btn) {
+            btn.disabled = isLoading;
+        }
+    }
+    else {
+        container.style.display = 'none';
+    }
+}
+// Update product counter
+function updateProductCounter() {
+    const currentCountEl = document.getElementById('currentCount');
+    const totalCountEl = document.getElementById('totalCount');
+    if (currentCountEl && totalCountEl) {
+        currentCountEl.textContent = displayedProducts.length.toString();
+        totalCountEl.textContent = filteredProducts.length.toString();
+    }
+}
+// Reset pagination state
+function resetInfiniteScroll() {
+    currentPage = 0;
+    displayedProducts = [];
+    hasMoreProducts = true;
+    isLoading = false;
+    // Load first batch immediately
+    const startIndex = 0;
+    const endIndex = PRODUCTS_PER_PAGE;
+    const initialProducts = filteredProducts.slice(startIndex, endIndex);
+    if (initialProducts.length > 0) {
+        displayedProducts = initialProducts;
+        currentPage = 1;
+        hasMoreProducts = endIndex < filteredProducts.length;
+        renderProducts();
+        updateLoadMoreButton();
+        updateProductCounter();
+    }
+    else {
+        // No products to display
+        renderProducts();
+        updateLoadMoreButton();
+        updateProductCounter();
     }
 }
 // Render products
@@ -144,7 +247,7 @@ function renderProducts() {
     const container = document.getElementById('bestSellers');
     if (!container)
         return;
-    container.innerHTML = filteredProducts.map(product => {
+    container.innerHTML = displayedProducts.map(product => {
         // Determine badge class based on badge text
         let badgeClass = '';
         if (product.badge) {
@@ -298,23 +401,6 @@ function initNavigation() {
             }
         });
     }
-    document.querySelectorAll('.category-card').forEach(card => {
-        card.style.cursor = 'pointer';
-        card.addEventListener('click', () => {
-            var _a;
-            const title = (_a = card.querySelector('.category-title')) === null || _a === void 0 ? void 0 : _a.textContent;
-            alert(`עובר לקטגוריה: ${title}\nדף קטגוריה - בקרוב!`);
-        });
-    });
-    document.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', (e) => {
-            if (link.getAttribute('href') === '#') {
-                e.preventDefault();
-                const category = link.textContent;
-                alert(`עובר ל: ${category}\nדף - בקרוב!`);
-            }
-        });
-    });
 }
 // Initialize search and filter
 function initSearchAndFilter() {
@@ -381,15 +467,86 @@ function initScrollToTop() {
         });
     });
 }
+// Initialize Load More button
+function initLoadMore() {
+    const loadMoreBtn = document.getElementById('loadMoreBtn');
+    if (loadMoreBtn) {
+        loadMoreBtn.addEventListener('click', () => {
+            loadMoreProducts();
+        });
+    }
+}
+// Hero Slider functionality
+function initHeroSlider() {
+    const slides = document.querySelectorAll('.hero-slide');
+    if (slides.length === 0)
+        return;
+    let currentSlide = 0;
+    function showSlide(index) {
+        // Remove active class from all slides
+        slides.forEach(slide => slide.classList.remove('active'));
+        // Add active class to current slide
+        slides[index].classList.add('active');
+    }
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % slides.length;
+        showSlide(currentSlide);
+    }
+    // Auto-advance slides every 5 seconds
+    setInterval(nextSlide, 5000);
+    // Initialize first slide
+    showSlide(0);
+}
+// Initialize top categories
+function initTopCategories() {
+    const categoryButtons = document.querySelectorAll('.category-btn');
+    const categoryCards = document.querySelectorAll('.category-card');
+    categoryCards.forEach((card, index) => {
+        const button = card.querySelector('.category-btn');
+        if (!button)
+            return;
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+            // Map category cards to filter categories
+            const categoryMap = {
+                0: 'body-care', // Olive & Babassu
+                1: 'fragrances', // Vanilla Pink Pepper
+                2: 'body-care', // Shea & Kukui
+                3: 'accessories' // נעלי בית
+            };
+            const category = categoryMap[index] || 'all';
+            // Update filter
+            currentCategory = category;
+            // Update active filter button
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            filterButtons.forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.category === category) {
+                    btn.classList.add('active');
+                }
+            });
+            // Apply filter
+            filterProducts();
+            // Scroll to products section
+            const productsSection = document.getElementById('bestSellers');
+            if (productsSection) {
+                productsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+}
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize products array
     filteredProducts = [...products];
     loadCart();
-    renderProducts();
+    initLoadMore();
+    resetInfiniteScroll(); // Load initial products
     initSmoothScroll();
     initNavigation();
     initSearchAndFilter();
     initScrollToTop();
+    initHeroSlider();
+    initTopCategories();
     updateResultsInfo();
 });

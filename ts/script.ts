@@ -9,6 +9,13 @@ let currentSearchQuery: string = '';
 let currentSort: string = 'default';
 let filteredProducts: Product[] = [];
 
+// Infinite Scroll State
+const PRODUCTS_PER_PAGE: number = 20;
+let currentPage: number = 0;
+let displayedProducts: Product[] = [];
+let isLoading: boolean = false;
+let hasMoreProducts: boolean = true;
+
 // Cart Management
 function addToCart(productId: number): void {
     const product = products.find(p => p.id === productId);
@@ -137,7 +144,7 @@ function filterProducts(): void {
     }
     
     filteredProducts = results;
-    renderProducts();
+    resetInfiniteScroll();
     updateResultsInfo();
 }
 
@@ -156,7 +163,122 @@ function updateResultsInfo(): void {
     } else {
         noResults.style.display = 'none';
         productGrid.style.display = 'grid';
-        resultsCount.textContent = `מציג ${filteredProducts.length} מוצרים`;
+        const showing = Math.min(displayedProducts.length, filteredProducts.length);
+        resultsCount.textContent = `מציג ${showing} מתוך ${filteredProducts.length} מוצרים`;
+    }
+}
+
+// Load more products
+function loadMoreProducts(): void {
+    if (isLoading || !hasMoreProducts) {
+        return;
+    }
+    
+    const startIndex = currentPage * PRODUCTS_PER_PAGE;
+    const endIndex = startIndex + PRODUCTS_PER_PAGE;
+    const newProducts = filteredProducts.slice(startIndex, endIndex);
+    
+    if (newProducts.length === 0) {
+        hasMoreProducts = false;
+        updateLoadMoreButton();
+        return;
+    }
+    
+    isLoading = true;
+    showLoadMoreSpinner();
+    
+    // Simulate network delay for smooth UX
+    setTimeout(() => {
+        displayedProducts = [...displayedProducts, ...newProducts];
+        currentPage++;
+        hasMoreProducts = endIndex < filteredProducts.length;
+        
+        renderProducts();
+        updateLoadMoreButton();
+        updateProductCounter();
+        hideLoadMoreSpinner();
+        isLoading = false;
+    }, 400);
+}
+
+// Show loading spinner in button
+function showLoadMoreSpinner(): void {
+    const btn = document.getElementById('loadMoreBtn') as HTMLButtonElement;
+    const textSpan = btn?.querySelector('.load-more-text');
+    const spinnerSpan = btn?.querySelector('.load-more-spinner');
+    
+    if (btn && textSpan && spinnerSpan) {
+        btn.disabled = true;
+        textSpan.textContent = 'טוען...';
+        (spinnerSpan as HTMLElement).style.display = 'inline-flex';
+    }
+}
+
+// Hide loading spinner in button
+function hideLoadMoreSpinner(): void {
+    const btn = document.getElementById('loadMoreBtn') as HTMLButtonElement;
+    const textSpan = btn?.querySelector('.load-more-text');
+    const spinnerSpan = btn?.querySelector('.load-more-spinner');
+    
+    if (btn && textSpan && spinnerSpan) {
+        btn.disabled = false;
+        textSpan.textContent = 'טען עוד מוצרים';
+        (spinnerSpan as HTMLElement).style.display = 'none';
+    }
+}
+
+// Update Load More button visibility and state
+function updateLoadMoreButton(): void {
+    const container = document.getElementById('loadMoreContainer');
+    const btn = document.getElementById('loadMoreBtn') as HTMLButtonElement;
+    
+    if (!container) return;
+    
+    if (hasMoreProducts && filteredProducts.length > PRODUCTS_PER_PAGE) {
+        container.style.display = 'block';
+        if (btn) {
+            btn.disabled = isLoading;
+        }
+    } else {
+        container.style.display = 'none';
+    }
+}
+
+// Update product counter
+function updateProductCounter(): void {
+    const currentCountEl = document.getElementById('currentCount');
+    const totalCountEl = document.getElementById('totalCount');
+    
+    if (currentCountEl && totalCountEl) {
+        currentCountEl.textContent = displayedProducts.length.toString();
+        totalCountEl.textContent = filteredProducts.length.toString();
+    }
+}
+
+// Reset pagination state
+function resetInfiniteScroll(): void {
+    currentPage = 0;
+    displayedProducts = [];
+    hasMoreProducts = true;
+    isLoading = false;
+    
+    // Load first batch immediately
+    const startIndex = 0;
+    const endIndex = PRODUCTS_PER_PAGE;
+    const initialProducts = filteredProducts.slice(startIndex, endIndex);
+    
+    if (initialProducts.length > 0) {
+        displayedProducts = initialProducts;
+        currentPage = 1;
+        hasMoreProducts = endIndex < filteredProducts.length;
+        renderProducts();
+        updateLoadMoreButton();
+        updateProductCounter();
+    } else {
+        // No products to display
+        renderProducts();
+        updateLoadMoreButton();
+        updateProductCounter();
     }
 }
 
@@ -165,7 +287,7 @@ function renderProducts(): void {
     const container = document.getElementById('bestSellers');
     if (!container) return;
 
-    container.innerHTML = filteredProducts.map(product => {
+    container.innerHTML = displayedProducts.map(product => {
         // Determine badge class based on badge text
         let badgeClass = '';
         if (product.badge) {
@@ -323,24 +445,6 @@ function initNavigation(): void {
             }
         });
     }
-    
-    document.querySelectorAll<HTMLElement>('.category-card').forEach(card => {
-        card.style.cursor = 'pointer';
-        card.addEventListener('click', () => {
-            const title = card.querySelector('.category-title')?.textContent;
-            alert(`עובר לקטגוריה: ${title}\nדף קטגוריה - בקרוב!`);
-        });
-    });
-    
-    document.querySelectorAll<HTMLAnchorElement>('.nav-link').forEach(link => {
-        link.addEventListener('click', (e) => {
-            if (link.getAttribute('href') === '#') {
-                e.preventDefault();
-                const category = link.textContent;
-                alert(`עובר ל: ${category}\nדף - בקרוב!`);
-            }
-        });
-    });
 }
 
 // Initialize search and filter
@@ -413,17 +517,103 @@ function initScrollToTop(): void {
     });
 }
 
+// Initialize Load More button
+function initLoadMore(): void {
+    const loadMoreBtn = document.getElementById('loadMoreBtn');
+    
+    if (loadMoreBtn) {
+        loadMoreBtn.addEventListener('click', () => {
+            loadMoreProducts();
+        });
+    }
+}
+
+// Hero Slider functionality
+function initHeroSlider(): void {
+    const slides = document.querySelectorAll<HTMLElement>('.hero-slide');
+    if (slides.length === 0) return;
+    
+    let currentSlide = 0;
+    
+    function showSlide(index: number): void {
+        // Remove active class from all slides
+        slides.forEach(slide => slide.classList.remove('active'));
+        // Add active class to current slide
+        slides[index].classList.add('active');
+    }
+    
+    function nextSlide(): void {
+        currentSlide = (currentSlide + 1) % slides.length;
+        showSlide(currentSlide);
+    }
+    
+    // Auto-advance slides every 5 seconds
+    setInterval(nextSlide, 5000);
+    
+    // Initialize first slide
+    showSlide(0);
+}
+
+// Initialize top categories
+function initTopCategories(): void {
+    const categoryButtons = document.querySelectorAll<HTMLButtonElement>('.category-btn');
+    const categoryCards = document.querySelectorAll<HTMLElement>('.category-card');
+    
+    categoryCards.forEach((card, index) => {
+        const button = card.querySelector<HTMLButtonElement>('.category-btn');
+        if (!button) return;
+        
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            // Map category cards to filter categories
+            const categoryMap: { [key: number]: string } = {
+                0: 'body-care',    // Olive & Babassu
+                1: 'fragrances',   // Vanilla Pink Pepper
+                2: 'body-care',    // Shea & Kukui
+                3: 'accessories'   // נעלי בית
+            };
+            
+            const category = categoryMap[index] || 'all';
+            
+            // Update filter
+            currentCategory = category;
+            
+            // Update active filter button
+            const filterButtons = document.querySelectorAll<HTMLButtonElement>('.filter-btn');
+            filterButtons.forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.category === category) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // Apply filter
+            filterProducts();
+            
+            // Scroll to products section
+            const productsSection = document.getElementById('bestSellers');
+            if (productsSection) {
+                productsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+}
+
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize products array
     filteredProducts = [...products];
     
     loadCart();
-    renderProducts();
+    initLoadMore();
+    resetInfiniteScroll(); // Load initial products
     initSmoothScroll();
     initNavigation();
     initSearchAndFilter();
     initScrollToTop();
+    initHeroSlider();
+    initTopCategories();
     updateResultsInfo();
 });
 

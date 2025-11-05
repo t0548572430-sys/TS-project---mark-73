@@ -245,6 +245,26 @@
 
     <!-- Hero Section -->
     <section class="hero">
+        <!-- Hero Slider -->
+        <div class="hero-slider">
+            <div class="hero-slide active">
+                <img src="images/image (44).png" alt="Laline Products 1">
+            </div>
+            <div class="hero-slide">
+                <img src="images/image (46).png" alt="Laline Products 2">
+            </div>
+            <div class="hero-slide">
+                <img src="images/image (48).png" alt="Laline Products 3">
+            </div>
+            <div class="hero-slide">
+                <img src="images/image (47).png" alt="Laline Products 4">
+            </div>
+            <div class="hero-slide">
+                <img src="images/image (27).png" alt="Laline Products 5">
+            </div>
+        </div>
+        
+        <!-- Hero Content Overlay -->
         <div class="hero-content">
             <div class="hero-text">
                 <h1 class="hero-title">
@@ -262,94 +282,7 @@
             </div>
         </div>
     </section>
-
-    <!-- Best Sellers -->
-    <section class="section">
-        <div class="container">
-            <h2 class="section-title">BEST SELLERS</h2>
-            
-            <!-- Search and Filter Section -->
-            <div class="filter-section">
-                <div class="search-container">
-                    <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="11" cy="11" r="8"/>
-                        <path d="M21 21L16.65 16.65"/>
-                    </svg>
-                    <input type="text" id="searchInput" class="search-input" placeholder="חפש מוצרים...">
-                </div>
-                
-                <div class="filter-buttons">
-                    <button class="filter-btn active" data-category="all">הכל</button>
-                    <button class="filter-btn" data-category="body-care">טיפוח גוף</button>
-                    <button class="filter-btn" data-category="face-care">טיפוח פנים</button>
-                    <button class="filter-btn" data-category="fragrances">ניחוחות</button>
-                    <button class="filter-btn" data-category="home">בית</button>
-                    <button class="filter-btn" data-category="accessories">אביזרים</button>
-                </div>
-                
-                <div class="sort-container">
-                    <label for="sortSelect">מיון לפי:</label>
-                    <select id="sortSelect" class="sort-select">
-                        <option value="default">ברירת מחדל</option>
-                        <option value="price-low">מחיר: נמוך לגבוה</option>
-                        <option value="price-high">מחיר: גבוה לנמוך</option>
-                        <option value="name">שם: א-ת</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div class="results-info">
-                <span id="resultsCount">מציג את כל המוצרים</span>
-            </div>
-            
-            <div class="product-grid" id="bestSellers">
-                <!-- Products will be inserted by TypeScript -->
-            </div>
-            
-            <div id="noResults" class="no-results" style="display: none;">
-                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="11" cy="11" r="8"/>
-                    <path d="M21 21L16.65 16.65"/>
-                </svg>
-                <h3>לא נמצאו תוצאות</h3>
-                <p>נסה לחפש במילות חיפוש אחרות או בחר קטגוריה אחרת</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Promotional Strip -->
-    <section class="promo-strip">
-        <div class="promo-content">
-            <div class="promo-item">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M20 7h-4V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/>
-                </svg>
-                <span>משלוח חינם מעל ₪200</span>
-            </div>
-            <div class="promo-item">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                </svg>
-                <span>מוצרים מקוריים 100%</span>
-            </div>
-            <div class="promo-item">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
-                    <path d="M9 22V12h6v10"/>
-                </svg>
-                <span>החזרה תוך 30 יום</span>
-            </div>
-            <div class="promo-item">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="10"/>
-                    <path d="M12 6v6l4 2"/>
-                </svg>
-                <span>שירות לקוחות 24/7</span>
-            </div>
-        </div>
-    </section>
-
-    <!-- Top Categories -->
+ <!-- Top Categories -->
     <section class="section categories-section">
         <div class="container">
             <h2 class="section-title">TOP CATEGORIES</h2>
@@ -398,6 +331,104 @@
             </div>
         </div>
     </section>
+    <!-- Best Sellers -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">BEST SELLERS</h2>
+            
+            <!-- Search and Filter Section -->
+            <div class="filter-section">
+                <div class="search-container">
+                    <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="M21 21L16.65 16.65"/>
+                    </svg>
+                    <input type="text" id="searchInput" class="search-input" placeholder="חפש מוצרים...">
+                </div>
+                
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-category="all">הכל</button>
+                    <button class="filter-btn" data-category="body-care">טיפוח גוף</button>
+                    <button class="filter-btn" data-category="face-care">טיפוח פנים</button>
+                    <button class="filter-btn" data-category="fragrances">ניחוחות</button>
+                    <button class="filter-btn" data-category="home">בית</button>
+                    <button class="filter-btn" data-category="accessories">אביזרים</button>
+                </div>
+                
+                <div class="sort-container">
+                    <label for="sortSelect">מיון לפי:</label>
+                    <select id="sortSelect" class="sort-select">
+                        <option value="default">ברירת מחדל</option>
+                        <option value="price-low">מחיר: נמוך לגבוה</option>
+                        <option value="price-high">מחיר: גבוה לנמוך</option>
+                        <option value="name">שם: א-ת</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="results-info">
+                <span id="resultsCount">מציג את כל המוצרים</span>
+            </div>
+            
+            <div class="product-grid" id="bestSellers">
+                <!-- Products will be inserted by TypeScript -->
+            </div>
+            
+            <!-- Load More Button Container -->
+            <div id="loadMoreContainer" class="load-more-container" style="display: none;">
+                <button id="loadMoreBtn" class="load-more-btn">
+                    <span class="load-more-text">טען עוד מוצרים</span>
+                    <span class="load-more-spinner" style="display: none;">
+                        <span class="spinner-small"></span>
+                    </span>
+                </button>
+                <p class="load-more-info" id="loadMoreInfo">מציג <span id="currentCount">0</span> מתוך <span id="totalCount">0</span> מוצרים</p>
+            </div>
+            
+            <div id="noResults" class="no-results" style="display: none;">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"/>
+                    <path d="M21 21L16.65 16.65"/>
+                </svg>
+                <h3>לא נמצאו תוצאות</h3>
+                <p>נסה לחפש במילות חיפוש אחרות או בחר קטגוריה אחרת</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Promotional Strip -->
+    <section class="promo-strip">
+        <div class="promo-content">
+            <div class="promo-item">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 7h-4V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/>
+                </svg>
+                <span>משלוח חינם מעל ₪200</span>
+            </div>
+            <div class="promo-item">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+                <span>מוצרים מקוריים 100%</span>
+            </div>
+            <div class="promo-item">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+                    <path d="M9 22V12h6v10"/>
+                </svg>
+                <span>החזרה תוך 30 יום</span>
+            </div>
+            <div class="promo-item">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M12 6v6l4 2"/>
+                </svg>
+                <span>שירות לקוחות 24/7</span>
+            </div>
+        </div>
+    </section>
+
+   
 
     <!-- Features Section -->
     <section class="features-section">
